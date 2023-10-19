@@ -87,3 +87,34 @@ module Testbench1;
 endmodule
 ```
 [[Code#Index|Back to Index]]
+
+
+
+
+
+
+
+### LAB 4
+```verilog
+module Equation(input A,B,C,D, output F,G,Y,Z);
+    assign F=C|(~A&D)|(~B&~D);
+    assign G=(~C&D)|(A&~B)|(~A&B&~D);
+    assign Y=(~A&~B&D)|(C&~D)|(B&~D);
+    assign Z=(C&D)|B|(A&D);
+endmodule
+```
+```verilog
+module Testbench;
+    reg A,B,C,D;
+    wire F,G,Y,Z;
+    Equation uut(.A(A),.B(B),.C(C),.D(D),.F(F),.G(G),.Y(Y),.Z(Z));
+    integer i;
+    initial begin
+        for(i=0;i<16;i=i+1) begin
+            A=i[3];B=i[2];C=i[1];D=i[0];
+            #10;
+           end
+           $stop;
+    end
+endmodule
+```
