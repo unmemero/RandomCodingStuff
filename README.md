@@ -206,3 +206,66 @@ module fout_bit_adder_register_testbench;
     end
 endmodule
 ```
+
+### LAB 6
+```verilog
+module d_flipflop(input d, clk, reset, output reg q);
+    always @(posedge clk) begin
+        if (reset)
+        q=0;
+        else
+        q=d;
+    end
+endmodule
+```
+```verilog
+module counter(input clk, reset, output [2:0] presentState,output reg [2:0] nextState);
+    d_flipflop dff2(nextState[2],clk,reset,presentState[2]);
+    d_flipflop dff1(nextState[1],clk,reset,presentState[1]);
+    d_flipflop dff0(nextState[0],clk,reset,presentState[0]);
+    always @(presentState) begin
+        nextState[2] = (~presentState[2])&(~presentState[1]);
+        nextState[1] = (presentState[2])|((~presentState[1])&(~presentState[0]));
+        nextState[0] = ((~presentState[2]) & (~presentState[1]))|(presentState[1] & presentState[0]);
+    end
+endmodule
+```
+```verilog
+module COUNTER_TESTBENCH;
+    reg clk, reset;
+    wire [2:0] nextState;
+    wire [2:0] presentState;
+    counter uut(.clk(clk),.reset(reset),.nextState(nextState),.presentState(presentState));
+    initial begin
+        clk = 0;
+        reset = 1;
+        #150;
+        reset = 0;
+        #550;
+        $stop;
+    end
+    always #15 clk = ~clk;
+endmodule
+```
+Second testbench
+```verilog
+    reg clk, reset;
+    wire [2:0] nextState;
+    wire [2:0] presentState;
+    counter uut(.clk(clk),.reset(reset),.nextState(nextState),.presentState(presentState));
+    initial begin
+        clk = 0;
+        reset = 1;
+        #150;
+        reset = 0;
+        #250;
+	reset = 1;
+	#50;
+	reset = 0;
+	#250;
+        $stop;
+    end
+    always #15 clk = ~clk;
+endmodule
+```
+
