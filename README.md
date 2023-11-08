@@ -249,6 +249,7 @@ endmodule
 ```
 Second testbench
 ```verilog
+module COUNTER_TESTBENCH;
     reg clk, reset;
     wire [2:0] nextState;
     wire [2:0] presentState;
